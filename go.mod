@@ -1,3 +1,3 @@
-module github/bajiu/studygo
+module github/ba-jiujiu/studygo
 
 go 1.22.5
