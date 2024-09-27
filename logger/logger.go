@@ -45,22 +45,22 @@ func (f *file) Log(content string) {
 			fmt.Println("创建目录失败")
 			return
 		}
-		newFile, err := os.OpenFile(absPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	}
+	newFile, err := os.OpenFile(absPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Println("无法打开文件")
+		return
+	}
+	defer func(newFile *os.File) {
+		err := newFile.Close()
 		if err != nil {
-			fmt.Println("无法打开文件")
-			return
+			fmt.Println("文件关闭异常")
 		}
-		defer func(newFile *os.File) {
-			err := newFile.Close()
-			if err != nil {
-				fmt.Println("文件关闭异常")
-			}
-		}(newFile)
-		//追加文件内容
-		content = time.Now().Format("2006-01-02 15:04:05") + ": " + content
-		_, err = newFile.WriteString(content)
-		if err != nil {
-			fmt.Println("写出日志失败")
-		}
+	}(newFile)
+	//追加文件内容
+	content = time.Now().Format("2006-01-02 15:04:05") + ": " + content
+	_, err = newFile.WriteString(content)
+	if err != nil {
+		fmt.Println("写出日志失败")
 	}
 }
