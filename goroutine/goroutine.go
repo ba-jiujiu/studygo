@@ -50,17 +50,13 @@ func Do() {
 		wg.Add(1)
 		go CalcDigSum()
 	}
-
+	// 开启这个线程的作用是当所有CalcDigSum执行完毕后关闭resultChan通道
 	go func() {
 		wg.Wait()
 		close(resultChan)
 	}()
 
-	for {
-		v, ok := <-resultChan
-		if !ok {
-			break
-		}
+	for v := range resultChan {
 		fmt.Println(v)
 	}
 }
